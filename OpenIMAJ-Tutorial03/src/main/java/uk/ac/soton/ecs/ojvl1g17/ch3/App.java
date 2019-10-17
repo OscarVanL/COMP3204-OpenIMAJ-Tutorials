@@ -38,8 +38,8 @@ public class App {
         //distance in colour.
         input = ColourSpace.convert(input, ColourSpace.CIE_Lab);
 
-        segmentationApp.doKMeansSegmentation(input, false);
-        segmentationApp.doFHSegmentation(input);
+        //segmentationApp.doKMeansSegmentation(input, false);
+        segmentationApp.doFHSegmentation(input, true);
 
     }
 
@@ -79,7 +79,8 @@ public class App {
             private float[] floatObjToPrim(Float[] obj) {
                 float[] pixelPrimitive = new float[obj.length];
                 for (int i=0; i<obj.length; i++) {
-                    pixelPrimitive[i] = obj[i].;
+                    pixelPrimitive[i] = obj[i]
+                    ;
                 }
                 return pixelPrimitive;
             }
@@ -107,25 +108,24 @@ public class App {
         DisplayUtilities.display(input);
     }
 
-    private void doFHSegmentation(MBFImage input) {
+    private void doFHSegmentation(MBFImage input, boolean printLabels) {
 
 
-        FelzenszwalbHuttenlocherSegmenter segmenter = new FelzenszwalbHuttenlocherSegmenter();
+        FelzenszwalbHuttenlocherSegmenter segmenter = new FelzenszwalbHuttenlocherSegmenter(0.5f, 500f / 255f, 500);
         List<ConnectedComponent> components = segmenter.segment(input);
-        System.out.println("A");
 
-        int i = 0;
-
-        for (ConnectedComponent comp : components) {
-            //Only display point number for sufficiently large ConnectedComponents
-            if (comp.calculateArea() < 500)
-                continue;
-            input.drawText("Point: " + (i++), comp.calculateCentroidPixel(), HersheyFont.TIMES_MEDIUM, 20);
+        if (printLabels) {
+            int i = 0;
+            for (ConnectedComponent comp : components) {
+                //Only display point number for sufficiently large ConnectedComponents
+                if (comp.calculateArea() < 500)
+                    continue;
+                input.drawText("Point: " + (i++), comp.calculateCentroidPixel(), HersheyFont.TIMES_MEDIUM, 20);
+            }
         }
-        System.out.println("B");
+
 
         MBFImage out = SegmentationUtilities.renderSegments(input, components);
         DisplayUtilities.display(out);
-        System.out.println("C");
     }
 }
