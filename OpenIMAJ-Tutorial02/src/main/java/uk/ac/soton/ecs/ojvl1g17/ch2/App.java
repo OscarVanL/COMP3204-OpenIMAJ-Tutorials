@@ -40,6 +40,7 @@ public class App {
             this.originalImage = firstImg;
             this.imageFrame = DisplayUtilities.displayName(originalImage, "Tutorial2 Window, middle-mouse click to advance");
 
+            // Create middle-mouse click listener
             // It didn't work if I just added the listener to the imageFrame.
             // I copied this from some methods that added listeners within the DisplayUtilities class
             imageFrame.getContentPane().getComponent(0).addMouseListener(new MouseAdapter() {
