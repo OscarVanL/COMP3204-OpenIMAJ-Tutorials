@@ -152,7 +152,7 @@ public class App {
 
             BagOfVisualWords<byte[]> bovw = new BagOfVisualWords<byte[]>(assigner);
 
-            BlockSpatialAggregator<byte[], SparseIntFV> spatial = new BlockSpatialAggregator<byte[], SparseIntFV>(
+            BlockSpatialAggregator<byte[], SparseIntFV> spatial = new BlockSpatialAggregator<>(
                     bovw, 2, 2);
 
             return spatial.aggregate(pdsift.getByteKeypoints(0.015f), image.getBounds()).normaliseFV();

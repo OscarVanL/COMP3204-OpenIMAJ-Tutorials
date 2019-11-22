@@ -40,6 +40,7 @@ public class App {
         int similarId1 = 0;
         int similarId2 = 0;
         double bestDistance = 100;
+        // More comparisons than just Euclidean distance, I tried a few distance measures built into OpenIMAJ.
         List<Double> euclideans = new ArrayList<>();
         List<Double> sumSquares = new ArrayList<>();
         List<Double> correlations = new ArrayList<>();

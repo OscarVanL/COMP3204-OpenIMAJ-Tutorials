@@ -44,20 +44,17 @@ public class App {
     private static class ImageManager {
         private MBFImage query;
         private MBFImage target;
-
-        private JFrame imageFrame;
         private int frameCount = 0;
 
         ImageManager(MBFImage query, MBFImage target) {
             this.query = query;
             this.target = target;
 
-            DisplayUtilities.createNamedWindow("Tutorial5", "Test", true);
-            this.imageFrame = DisplayUtilities.displayName(query, "Tutorial5");
+            DisplayUtilities.createNamedWindow("Tutorial5", "Tutorial5", true);
+            JFrame imageFrame = DisplayUtilities.displayName(query, "Tutorial5");
 
-            // Create middle mouse click listener
+            // Create middle mouse click listener to advance between images from different parts of the tutorial
             // It didn't work if I just added the listener to the imageFrame.
-            // I copied this from some methods that added listeners within the DisplayUtilities class
             imageFrame.getContentPane().getComponent(0).addMouseListener(new MouseAdapter() {
                 @Override
                 public void mousePressed(MouseEvent e) {
@@ -80,7 +77,7 @@ public class App {
             switch(frameCount) {
                 case 0:
                     //Difference-of-Gaussian SIFT Engine:
-                    LocalFeatureMatcher<Keypoint> matcher = new BasicMatcher<Keypoint>(80);
+                    LocalFeatureMatcher<Keypoint> matcher = new BasicMatcher<>(80);
                     matcher.setModelFeatures(queryKeypoints);
                     matcher.findMatches(targetKeypoints);
 
@@ -89,8 +86,8 @@ public class App {
                     break;
                 case 1:
                     //RANSAC Model Fitted, used to find Affine Transforms
-                    matcher = new ConsistentLocalFeatureMatcher2d<Keypoint>(
-                            new FastBasicKeypointMatcher<Keypoint>(8), robustAffineModelFitter);
+                    matcher = new ConsistentLocalFeatureMatcher2d<>(
+                            new FastBasicKeypointMatcher<>(8), robustAffineModelFitter);
 
                     matcher.setModelFeatures(queryKeypoints);
                     matcher.findMatches(targetKeypoints);
@@ -120,8 +117,8 @@ public class App {
                     // But it also picked up a few anomalous results
                     // These could be eliminated using a smaller threshold value in the FastBasicKeypointMatcher (6 instead of 8)
                     RobustHomographyEstimator homographyEstimator = new RobustHomographyEstimator(0.75, HomographyRefinement.SINGLE_IMAGE_TRANSFER);
-                    matcher = new ConsistentLocalFeatureMatcher2d<Keypoint>(
-                            new FastBasicKeypointMatcher<Keypoint>(6), homographyEstimator);
+                    matcher = new ConsistentLocalFeatureMatcher2d<>(
+                            new FastBasicKeypointMatcher<>(6), homographyEstimator);
                     matcher.setModelFeatures(queryKeypoints);
                     matcher.findMatches(targetKeypoints);
 

@@ -31,14 +31,15 @@ public class App {
     public static void main( String[] args ) throws IOException {
         App segmentationApp = new App();
 
-        //Open an image I took of the University campus
+        //Open an image I took of the University campus.
+        //This has quite a high resolution so it takes some time, I probably should have resized it.
     	MBFImage input = ImageUtilities.readMBF(new URL("https://i.imgur.com/3Q3lXif.jpg"));
         //Convert from RGB colourspace into LAB colour space
         //This allows the euclidean distance calculated between colours to be more representative of the perceived
         //distance in colour.
         input = ColourSpace.convert(input, ColourSpace.CIE_Lab);
 
-        //segmentationApp.doKMeansSegmentation(input, false);
+        //segmentationApp.doKMeansSegmentation(input, true);
         segmentationApp.doFHSegmentation(input, true);
 
     }
@@ -59,7 +60,7 @@ public class App {
 
         final HardAssigner<float[],?,?> assigner = result.defaultHardAssigner();
 
-        // Exercise 3.1.1
+        // Exercise 3.1.1: The PixelProcessor
         final MBFImage finalInput = input;
         input.processInplace(new PixelProcessor<Float[]>() {
             public Float[] processPixel(Float[] pixel) {
@@ -109,8 +110,7 @@ public class App {
     }
 
     private void doFHSegmentation(MBFImage input, boolean printLabels) {
-
-
+        // Exercise 3.1.2: A real segmentation algorithm
         FelzenszwalbHuttenlocherSegmenter segmenter = new FelzenszwalbHuttenlocherSegmenter(0.5f, 500f / 255f, 500);
         List<ConnectedComponent> components = segmenter.segment(input);
 
